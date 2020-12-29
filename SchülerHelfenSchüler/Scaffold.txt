@@ -1,0 +1,1 @@
+﻿dotnet ef dbcontext scaffold Name=ConnectionStrings.SchülerHelfenSchüler Microsoft.EntityFrameworkCore.SqlServer --project SchülerHelfenSchüler -o Models --force
