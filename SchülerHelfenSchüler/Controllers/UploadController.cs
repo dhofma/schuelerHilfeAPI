@@ -4,25 +4,34 @@ using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace SchülerHelfenSchüler.Controllers {
+    [EnableCors("AllowAll")]
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class UploadController : ControllerBase {   
         [HttpPost, DisableRequestSizeLimit]
-        public async IActionResult Upload() {
+        public async Task<IActionResult> Upload() {
             try {
                 var formCollection = await Request.ReadFormAsync();
                 var file = formCollection.Files.First();
                 var folderName = Path.Combine("Resources", "Images");
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
 
-                if(file.Length < 0) {
+                if(file.Length > 0) {
                     var filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
                     var fullPath = Path.Combine(pathToSave, filename);
-                    var 
+
+                    using (var stream = new FileStream(fullPath, FileMode.Create)) {
+                        await file.CopyToAsync(stream);
+                    }
+                    return Ok();
+                }
+                else {
+                    return BadRequest();
                 }
             }
             catch (Exception ex) {

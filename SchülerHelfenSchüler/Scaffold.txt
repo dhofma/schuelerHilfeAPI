@@ -1,1 +1,5 @@
 ﻿dotnet ef dbcontext scaffold Name=ConnectionStrings.SchülerHelfenSchüler Microsoft.EntityFrameworkCore.SqlServer --project SchülerHelfenSchüler -o Models --force
+
+
+change connection string in context to:
+"Server=tcp:schuelerhelfenschueler.database.windows.net,1433;Initial Catalog=SchülerHelfenSchüler;Persist Security Info=False;User ID=dhofma;Password=salzweg44?;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
