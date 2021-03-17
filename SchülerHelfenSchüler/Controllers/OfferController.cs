@@ -29,14 +29,17 @@ namespace SchülerHelfenSchüler.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateOffer([FromBody] UserOffer uOffer) {
+        public ActionResult<UserOffer> CreateOffer([FromBody] UserOffer uOffer) {
             if (context.Offers.Where(x => x.UserId == uOffer.UserId && x.Subject == uOffer.Subject).Count() > 0) {
-                context.Offers.Update(new Offer() {
-                    UserId = uOffer.UserId,
-                    Subject = uOffer.Subject,
-                    TeacherId = uOffer.TeacherId
-                });
-            }
+                Offer tempOffer = context.Offers.Where(x => x.UserId == uOffer.UserId && x.Subject == uOffer.Subject).First();
+                tempOffer.TeacherId = uOffer.TeacherId;
+                context.Offers.Update(tempOffer);
+                //context.Offers.Update(new Offer() {
+                //    UserId = uOffer.UserId,
+                //    Subject = uOffer.Subject,
+                //    TeacherId = uOffer.TeacherId
+                //});
+            }   
             else {
                 context.Offers.Add(new Offer() {
                     UserId = uOffer.UserId,
@@ -50,7 +53,7 @@ namespace SchülerHelfenSchüler.Controllers
             catch (Exception ex) {
                 return BadRequest(ex);
             }
-            return Ok();
+            return uOffer;
         }
 
 
