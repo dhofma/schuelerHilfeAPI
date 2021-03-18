@@ -23,6 +23,7 @@ namespace SchülerHelfenSchüler.Controllers
             return context.Teachers.ToList();
         }
 
+        [HttpGet("{subject}")]
         public ActionResult<IEnumerable<Teacher>> GetTeacherBySubject(string subject) {
             return context.SubjectTeachers.Where(x => x.Subject == subject).Select(x => x.Teacher).ToList();
         }
