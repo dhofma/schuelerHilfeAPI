@@ -10,8 +10,7 @@ namespace SchülerHelfenSchüler.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OfferController : ControllerBase
-    {
+    public class OfferController : ControllerBase {
         private SchülerHelfenSchülerContext context;
 
         public OfferController(SchülerHelfenSchülerContext context) {
@@ -23,9 +22,19 @@ namespace SchülerHelfenSchüler.Controllers
             return context.UserOffers.ToList();
         }
 
-        [HttpGet("{userId}")]
-        public ActionResult<IEnumerable<UserOffer>> GetOffersByUser(string userId) {
-            return context.UserOffers.Where(x => x.UserId == userId).ToList();
+        [HttpPost("{filter}")]
+        public ActionResult<IEnumerable<UserOffer>> GetOffersByFilter([FromBody] OfferFilter filter) {
+            List<UserOffer> result = context.UserOffers.ToList();
+            if (!string.IsNullOrWhiteSpace(filter.UserId)) {
+                result = result.Where(x => x.UserId == filter.UserId).ToList();
+            }
+            if (!string.IsNullOrWhiteSpace(filter.Subject)) {
+                result = result.Where(x => x.Subject == filter.Subject).ToList();
+            }
+            if (filter.TeacherId != 0) {
+                result = result.Where(x => x.TeacherId == filter.TeacherId).ToList();
+            }
+            return result;
         }
 
         [HttpPost]
