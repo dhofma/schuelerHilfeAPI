@@ -60,6 +60,14 @@ namespace SchülerHelfenSchüler.Controllers
             return offer;
         }
 
+        [HttpDelete]
+        public ActionResult Delete([FromBody] UserOffer uoffer) {
+            Offer toDelete = context.Offers.Where(x => x.UserId == uoffer.UserId && x.Subject == uoffer.Subject && x.TeacherId == uoffer.TeacherId).First();
+            context.Offers.Remove(toDelete);
+            context.SaveChanges();
+            return Ok();
+        }
+
 
     }
 }
